@@ -3,14 +3,14 @@ class Snake {
   direction = "left";
   tail = [];
   head = {};
-  size = 5;
+  size = 10;
 
   constructor() {
     this.head = createVector(floor(cols / 2), floor(rows / 2));
+    this.head.mult(scale);
 
     for (let i = 0; i < this.size; i++) {
       this.tail[i] = createVector(this.head.x, this.head.y);
-      this.tail[i].x = this.tail[i].x + (i + 1) * scale;
     }
   }
 
@@ -42,21 +42,32 @@ class Snake {
     this.head.y = constrain(this.head.y, 0, wHeight - scale);
   }
 
-  intersects(pos){
-    if(this.intersectsHead(pos)) return true;
+  intersects(pos) {
+    if (this.intersectsHead(pos)) return true;
 
-    for(let tailPart in this.tail)
-      if(tailPart.x === pos.x && tailPart.y === pos.y) return true;
-    
+    for (let i = 0; i < this.tail.length - 1; i++)
+      if (this.tail[i].x === pos.x && this.tail[i].y === pos.y) return true;
+
     return false;
   }
 
-  intersectsHead(pos){
+  intersectsSelf() {
+    for (let i = 0; i < this.tail.length - 1; i++)
+      if (this.intersectsHead(this.tail[i])) return true;
+
+    return false;
+  }
+
+  intersectsHead(pos) {
     return this.head.x === pos.x && this.head.y === pos.y;
   }
 
   changeDirection(dir) {
     this.direction = dir;
+  }
+
+  getSize(){
+    return (this.size - 10) * 850;
   }
 
   show() {
