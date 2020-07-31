@@ -13,22 +13,26 @@ let score = {
   },
   current: 0,
   max: 0
-}
+};
+let keyDown = false;
+let currentFPS = 10;
 
 function setup() {
   createCanvas(wWidth, wHeight);
-  frameRate(10);
+  frameRate(currentFPS);
   food = new Food();
   snake = new Snake();
 }
 
 function update(){
   if (snake.intersectsSelf()){
-    if(snake.getSize() < score.max) score.max = snake.getSize();
+    if(snake.getScore() > score.max) score.max = snake.getScore();
+    currentFPS = 10;
     snake = new Snake();
   }
   if(food.eat(snake.head)) snake.grow();
-  score.current = snake.getSize();
+  score.current = snake.getScore();
+  this.speedUp();
   if (food.getQuantitiy() === 0) food.drop(this.getEmptyPos());
 }
 
@@ -38,6 +42,7 @@ function draw() {
   food.show();
   snake.update();
   snake.show();
+  this.keyDown = false;
   textFont('Arial');
   textAlign(RIGHT);
   fill("#999999");
@@ -51,6 +56,7 @@ function draw() {
 }
 
 function keyPressed() {
+  if(this.keyDown) return;
   switch (key) {
     case 'ArrowUp':
     case 'w':
@@ -68,6 +74,28 @@ function keyPressed() {
     case 'a':
       if (snake.direction !== "right") snake.changeDirection("left");
       break;
+  }
+  this.keyDown = true;
+}
+
+function speedUp(){
+  if(snake.tailLength < 20 && currentFPS == 10 || currentFPS == 20){
+    return;
+  } else if(currentFPS == 10 && snake.tailLength > 20){
+    currentFPS = 12;
+    frameRate(currentFPS);
+  } else if(currentFPS == 12 && snake.tailLength > 40){
+    currentFPS = 14;
+    frameRate(currentFPS);
+  } else if(currentFPS == 14 && snake.tailLength > 60){
+    currentFPS = 16;
+    frameRate(currentFPS);
+  } else if(currentFPS == 16 && snake.tailLength > 80){
+    currentFPS = 18;
+    frameRate(currentFPS);
+  } else if(currentFPS == 18 && snake.tailLength > 100){
+    currentFPS = 20;
+    frameRate(currentFPS);
   }
 }
 
