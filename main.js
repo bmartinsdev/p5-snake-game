@@ -24,9 +24,10 @@ function setup() {
 
 function update(){
   if (snake.intersectsSelf()){
-    score.max = snake.getSize();
+    if(snake.getSize() < score.max) score.max = snake.getSize();
     snake = new Snake();
   }
+  if(food.eat(snake.head)) snake.grow();
   score.current = snake.getSize();
   if (food.getQuantitiy() === 0) food.drop(this.getEmptyPos());
 }
@@ -37,15 +38,16 @@ function draw() {
   food.show();
   snake.update();
   snake.show();
-  textFont('Montserrat');
+  textFont('Arial');
+  textAlign(RIGHT);
   fill("#999999");
   textSize(11);
-  text('SCORE', score.pos.x, score.pos.y);
-  text('BEST', score.pos.x + 100, score.pos.y);
+  text('SCORE', score.pos.x + 50, score.pos.y);
+  text('BEST', score.pos.x + 160, score.pos.y);
   fill("#000000");
   textSize(14);
-  text(score.current, score.pos.x, score.pos.y + 20);
-  text(score.max, score.pos.x + 100, score.pos.y + 20);
+  text(score.current, score.pos.x + 50, score.pos.y + 20);
+  text(score.max, score.pos.x + 160, score.pos.y + 20);
 }
 
 function keyPressed() {

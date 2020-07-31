@@ -67,7 +67,12 @@ class Snake {
   }
 
   getSize(){
-    return (this.size - 10) * 850;
+    return (this.tail.length - this.size) * 850;
+  }
+
+  grow(){
+    this.tail.push(createVector(this.head.x, this.head.y));
+    this.tail.push(createVector(this.head.x, this.head.y));
   }
 
   show() {
