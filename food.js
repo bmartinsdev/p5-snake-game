@@ -29,7 +29,7 @@ class Food {
     let foodDist;
     for (let i = 0; i < this.foodLength; i++){
       let thisDist = dist(head.x, this.food[i].x, head.y, this.food[i].y);
-      if (thisDist < foodDist || !foodDist){
+      if (!foodDist || thisDist < foodDist){
         foodDist = thisDist;
         this.target = this.food[i];
       }

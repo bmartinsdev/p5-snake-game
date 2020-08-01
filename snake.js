@@ -21,12 +21,12 @@ class Snake {
     for (let i = 0; i < this.tailLength - 1; i++)
       this.tail[i] = this.tail[i + 1];
 
-    this.move(this.head);
+    this.move(this.head, this.direction);
     this.tail[this.tailLength - 1] = createVector(this.head.x, this.head.y);
   }
 
-  move(pos) {
-    switch (this.direction) {
+  move(pos, dir) {
+    switch (dir) {
       case "up":
         pos.y = pos.y - this.speed * scale;
         break;
@@ -91,7 +91,7 @@ class Snake {
 
     for (let i = 0; i < this.tailLength; i++)
       rect(this.tail[i].x, this.tail[i].y, scale, scale);
-
+    if(snake.dead) fill("#a97878");
     rect(this.head.x, this.head.y, scale, scale);
   }
 }
