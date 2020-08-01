@@ -7,19 +7,22 @@ class Food {
   }
 
   drop(pos) {
-    if (this.foodLength < this.max) this.food.push(pos);
-    this.foodLength = this.food.length;
-    this.updateTarget(snake.head);
+    if (this.foodLength < this.max){
+      this.food.push(pos);
+      this.foodLength = this.food.length;
+      this.updateTarget(snake.head);
+    } 
   }
 
   eat(pos) {
-    for (let i = 0; i < this.foodLength; i++)
-      if (this.food[i].x === pos.x && this.food[i].y === pos.y){
+    for (let i = 0; i < this.foodLength; i++){
+      if (dist(this.food[i].x, this.food[i].y, pos.x, pos.y) < scale){
         this.food.splice(i, 1);
         this.foodLength = this.food.length;
         this.updateTarget(snake.head);
         return true;
       }
+    }
     this.foodLength = this.food.length;
     this.updateTarget(snake.head);
     return false;
