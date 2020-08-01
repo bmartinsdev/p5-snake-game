@@ -5,7 +5,7 @@ class Snake {
   tailLength = 0;
   head = {};
   size = 10;
-  manual = false;
+  dead = false;
 
   constructor() {
     this.head = createVector(floor(cols / 2), floor(rows / 2));
@@ -21,28 +21,28 @@ class Snake {
     for (let i = 0; i < this.tailLength - 1; i++)
       this.tail[i] = this.tail[i + 1];
 
-    this.move();
+    this.move(this.head);
     this.tail[this.tailLength - 1] = createVector(this.head.x, this.head.y);
   }
 
-  move() {
+  move(pos) {
     switch (this.direction) {
       case "up":
-        this.head.y = this.head.y - this.speed * scale;
+        pos.y = pos.y - this.speed * scale;
         break;
       case "down":
-        this.head.y = this.head.y + this.speed * scale;
+        pos.y = pos.y + this.speed * scale;
         break;
       case "left":
-        this.head.x = this.head.x - this.speed * scale;
+        pos.x = pos.x - this.speed * scale;
         break;
       case "right":
-        this.head.x = this.head.x + this.speed * scale;
+        pos.x = pos.x + this.speed * scale;
         break;
     }
 
-    this.head.x = constrain(this.head.x, 0, wWidth - scale);
-    this.head.y = constrain(this.head.y, 0, wHeight - scale);
+    pos.x = constrain(pos.x, 0, wWidth - scale);
+    pos.y = constrain(pos.y, 0, wHeight - scale);
   }
 
   intersects(pos) {
@@ -63,6 +63,10 @@ class Snake {
 
   intersectsHead(pos) {
     return this.head.x === pos.x && this.head.y === pos.y;
+  }
+
+  canMove(){
+    return true;
   }
 
   changeDirection(dir) {
