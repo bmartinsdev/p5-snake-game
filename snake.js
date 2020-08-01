@@ -5,6 +5,7 @@ class Snake {
   tailLength = 0;
   head = {};
   size = 10;
+  manual = false;
 
   constructor() {
     this.head = createVector(floor(cols / 2), floor(rows / 2));

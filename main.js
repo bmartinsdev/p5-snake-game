@@ -40,6 +40,7 @@ function draw() {
   this.update();
   background("#fafafa");
   food.show();
+  if(!snake.manual) this.pathFinder();
   snake.update();
   snake.show();
   this.keyDown = false;
@@ -53,6 +54,13 @@ function draw() {
   textSize(14);
   text(score.current, score.pos.x + 50, score.pos.y + 20);
   text(score.max, score.pos.x + 160, score.pos.y + 20);
+}
+
+function pathFinder(){}
+
+function mousePressed() {
+  let pos = createVector(floor(mouseX / scale) * scale, floor(mouseY / scale) * scale);
+  food.drop(pos);
 }
 
 function keyPressed() {
@@ -76,6 +84,7 @@ function keyPressed() {
       break;
   }
   this.keyDown = true;
+  snake.manual = true;
 }
 
 function speedUp(){
@@ -100,12 +109,10 @@ function speedUp(){
 }
 
 function getEmptyPos(){
-  let location = createVector(floor(random(cols)), floor(random(rows)));
-  location.mult(scale);
+  let location = createVector(floor(random(cols)) * scale, floor(random(rows)) * scale);
 
   while(snake.intersects(location)){
-    location = createVector(floor(random(cols)), floor(random(rows)));
-    location.mult(scale);
+    location = createVector(floor(random(cols)) * scale, floor(random(rows)) * scale);
   }
     
   return location;
