@@ -1,3 +1,4 @@
+const debug = false;
 let canvas;
 let snake;
 let food;
@@ -16,18 +17,20 @@ let score = {
 };
 let keyDown = false;
 let currentFPS = 10;
-let pathFinding = 1;
+let pathFinding = 2;
 let resetGame = false;
 let directions = {
-  up: "down",
-  down: "up",
-  left: "right",
-  right: "left",
+  up: 'down',
+  down: 'up',
+  left: 'right',
+  right: 'left',
 };
 
 function setup() {
+  score.max = localStorage.getItem('lugh-snake-score') || 0;
   createCanvas(wWidth, wHeight);
   frameRate(currentFPS);
+  if (debug) frameRate(60);
   food = new Food();
   snake = new Snake();
 }
@@ -40,7 +43,7 @@ function update() {
       snake.grow();
     }
     score.current = snake.getScore();
-    this.speedUp();
+    if (!debug) this.speedUp();
     if (food.getQuantitiy() === 0) food.drop(this.getEmptyPos());
   }
   if (pathFinding) this.pathFinder();
@@ -49,10 +52,13 @@ function update() {
   } else {
     if (!resetGame) {
       resetGame = true;
-      if (snake.getScore() > score.max) score.max = snake.getScore();
       setTimeout(function () {
+        if (snake.getScore() > score.max) {
+          score.max = snake.getScore();
+          localStorage.setItem('lugh-snake-score', score.max);
+        }
         currentFPS = 10;
-        pathFinding = 1;
+        pathFinding = 2;
         resetGame = false;
         snake = new Snake();
         food = new Food();
@@ -63,17 +69,17 @@ function update() {
 
 function draw() {
   this.update();
-  background("#fafafa");
+  background('#fafafa');
   food.show();
   snake.show();
   keyDown = false;
-  textFont("Arial");
+  textFont('Arial');
   textAlign(RIGHT);
-  fill("#999999");
+  fill('#999999');
   textSize(11);
-  text("SCORE", score.pos.x + 50, score.pos.y);
-  text("BEST", score.pos.x + 160, score.pos.y);
-  fill("#000000");
+  text('SCORE', score.pos.x + 50, score.pos.y);
+  text('BEST', score.pos.x + 160, score.pos.y);
+  fill('#000000');
   textSize(14);
   text(score.current, score.pos.x + 50, score.pos.y + 20);
   text(score.max, score.pos.x + 160, score.pos.y + 20);
@@ -82,92 +88,145 @@ function draw() {
 function pathFinder() {
   switch (pathFinding) {
     case 1:
-      dumbFoodFinder();
+      shortestPath();
+      break;
+    case 2:
+      straightLines();
       break;
   }
 }
 
-function dumbFoodFinder() {
+function shortestPath() {
   if (!food.target) return;
   switch (snake.direction) {
-    case "up":
+    case 'up':
       if (snake.head.x < food.target.x) {
-        this.tryMove("right");
+        this.tryMove('right');
       } else if (snake.head.x > food.target.x) {
-        this.tryMove("left");
+        this.tryMove('left');
       } else if (
         snake.head.x === food.target.x &&
         snake.head.y < food.target.y
       ) {
-        this.tryMove("right");
+        this.tryMove('right');
       } else if (snake.head.y === food.target.y) {
         if (snake.head.x < food.target.x) {
-          this.tryMove("left");
+          this.tryMove('left');
         } else if (snake.head.x > food.target.x) {
-          this.tryMove("right");
+          this.tryMove('right');
         }
       } else {
         this.tryMove(snake.direction);
       }
       break;
-    case "down":
+    case 'down':
       if (snake.head.x > food.target.x) {
-        this.tryMove("left");
+        this.tryMove('left');
       } else if (snake.head.x < food.target.x) {
-        this.tryMove("right");
+        this.tryMove('right');
       } else if (
         snake.head.x === food.target.x &&
         snake.head.y > food.target.y
       ) {
-        this.tryMove("right");
+        this.tryMove('right');
       } else if (snake.head.y === food.target.y) {
         if (snake.head.x > food.target.x) {
-          this.tryMove("left");
+          this.tryMove('left');
         } else if (snake.head.x < food.target.x) {
-          this.tryMove("right");
+          this.tryMove('right');
         }
       } else {
         this.tryMove(snake.direction);
       }
       break;
-    case "left":
+    case 'left':
       if (snake.head.y < food.target.y) {
-        this.tryMove("down");
+        this.tryMove('down');
       } else if (snake.head.y > food.target.y) {
-        this.tryMove("up");
+        this.tryMove('up');
       } else if (
         snake.head.y === food.target.y &&
         snake.head.x < food.target.x
       ) {
-        this.tryMove("up");
+        this.tryMove('up');
       } else if (snake.head.x === food.target.x) {
         if (snake.head.y < food.target.y) {
-          this.tryMove("down");
+          this.tryMove('down');
         } else if (snake.head.y > food.target.y) {
-          this.tryMove("up");
+          this.tryMove('up');
         }
       } else {
         this.tryMove(snake.direction);
       }
       break;
-    case "right":
+    case 'right':
       if (snake.head.y > food.target.y) {
-        this.tryMove("up");
+        this.tryMove('up');
       } else if (snake.head.y < food.target.y) {
-        this.tryMove("down");
+        this.tryMove('down');
       } else if (
         snake.head.y === food.target.y &&
         snake.head.x > food.target.x
       ) {
-        this.tryMove("up");
+        this.tryMove('up');
       } else if (snake.head.x === food.target.x) {
         if (snake.head.y < food.target.y) {
-          this.tryMove("down");
+          this.tryMove('down');
         } else if (snake.head.y > food.target.y) {
-          this.tryMove("up");
+          this.tryMove('up');
         }
       } else {
         this.tryMove(snake.direction);
+      }
+      break;
+  }
+}
+
+function straightLines() {
+  if (!food.target) return;
+  switch (snake.direction) {
+    case 'up':
+      if(snake.head.y > food.target.y){
+        this.tryMove('up');
+      } else if(snake.head.y < food.target.y || snake.head.y === food.target.y){
+        if (snake.head.x <= food.target.x) {
+          this.tryMove('right');
+        } else {
+          this.tryMove('left');
+        }
+      }
+      break;
+    case 'down':
+      if(snake.head.y < food.target.y){
+        this.tryMove('down');
+      } else if(snake.head.y > food.target.y || snake.head.y === food.target.y){
+        if (snake.head.x <= food.target.x) {
+          this.tryMove('right');
+        } else {
+          this.tryMove('left');
+        }
+      }
+      break;
+    case 'left':
+      if(snake.head.x > food.target.x){
+        this.tryMove('left');
+      } else if(snake.head.x < food.target.x || snake.head.x === food.target.x){
+        if (snake.head.y >= food.target.y) {
+          this.tryMove('up');
+        } else {
+          this.tryMove('down');
+        }
+      }
+      break;
+    case 'right':
+      if(snake.head.x < food.target.x){
+        this.tryMove('right');
+      } else if(snake.head.x > food.target.x || snake.head.x === food.target.x){
+        if (snake.head.y >= food.target.y) {
+          this.tryMove('up');
+        } else {
+          this.tryMove('down');
+        }
       }
       break;
   }
@@ -197,8 +256,12 @@ function tryMove(key) {
     let head = snake.head.copy();
     snake.move(head, dir);
     if (!snake.intersects(head)) {
+      snake.move(head, dir);
+      if (!snake.intersects(head)) {
+        key = dir;
+        break;
+      }
       key = dir;
-      break;
     }
   }
   this.move(key);
@@ -207,25 +270,25 @@ function tryMove(key) {
 function move(key) {
   if (keyDown) return;
   switch (key) {
-    case "ArrowUp":
-    case "w":
-    case "up":
-      if (snake.direction !== "down") snake.changeDirection("up");
+    case 'ArrowUp':
+    case 'w':
+    case 'up':
+      if (snake.direction !== 'down') snake.changeDirection('up');
       break;
-    case "ArrowDown":
-    case "s":
-    case "down":
-      if (snake.direction !== "up") snake.changeDirection("down");
+    case 'ArrowDown':
+    case 's':
+    case 'down':
+      if (snake.direction !== 'up') snake.changeDirection('down');
       break;
-    case "ArrowRight":
-    case "d":
-    case "right":
-      if (snake.direction !== "left") snake.changeDirection("right");
+    case 'ArrowRight':
+    case 'd':
+    case 'right':
+      if (snake.direction !== 'left') snake.changeDirection('right');
       break;
-    case "ArrowLeft":
-    case "a":
-    case "left":
-      if (snake.direction !== "right") snake.changeDirection("left");
+    case 'ArrowLeft':
+    case 'a':
+    case 'left':
+      if (snake.direction !== 'right') snake.changeDirection('left');
       break;
   }
   keyDown = true;

@@ -65,10 +65,6 @@ class Snake {
     return this.head.x === pos.x && this.head.y === pos.y;
   }
 
-  canMove(){
-    return true;
-  }
-
   changeDirection(dir) {
     this.direction = dir;
   }
