@@ -46,7 +46,7 @@ class Snake {
   intersects(pos) {
     if (this.intersectsHead(pos)) return true;
 
-    for (let i = 0; i < this.tailLength - 1; i++) if (this.tail[i].x === pos.x && this.tail[i].y === pos.y) return true;
+    for (let i = 0; i < this.tailLength - 1; i++) if (dist(this.tail[i].x, this.tail[i].y, pos.x, pos.y) < scale) return true;
 
     return false;
   }
@@ -58,7 +58,7 @@ class Snake {
   }
 
   intersectsHead(pos) {
-    return this.head.x === pos.x && this.head.y === pos.y;
+    return dist(this.head.x, this.head.y, pos.x, pos.y) < scale;
   }
 
   changeDirection(dir) {

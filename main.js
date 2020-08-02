@@ -237,7 +237,7 @@ function mousePressed() {
     floor(mouseX / scale) * scale,
     floor(mouseY / scale) * scale
   );
-  food.drop(pos);
+  if(!snake.intersects(pos) && !this.outOfBoundaries(pos)) food.drop(pos);
 }
 
 function keyPressed() {
@@ -313,6 +313,10 @@ function speedUp() {
     currentFPS = 20;
     frameRate(currentFPS);
   }
+}
+
+function outOfBoundaries(pos){
+  return pos.x < 0 || pos.y < 0 || pos.x > wWidth - scale || pos.y > wHeight - scale;
 }
 
 function getEmptyPos() {
