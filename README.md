@@ -7,4 +7,4 @@ On keypress ( WASD / Arrow Keys ) pseudo AI stops and you can play normally.
 https://lughapp.github.io/p5-snake-game/
 
 ## Inspiration
-![Coding train](https://thecodingtrain.com/CodingChallenges/003-snake-game-p5.html)
+[Coding train](https://thecodingtrain.com/CodingChallenges/003-snake-game-p5.html)
