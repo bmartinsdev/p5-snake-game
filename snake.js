@@ -1,13 +1,12 @@
 class Snake {
-  speed = 1;
-  direction = "left";
-  tail = [];
-  tailLength = 0;
-  head = {};
-  size = 10;
-  dead = false;
-
   constructor() {
+    this.speed = 1;
+    this.direction = "left";
+    this.tail = [];
+    this.tailLength = 0;
+    this.size = 10;
+    this.dead = false;
+
     this.head = createVector(floor(cols / 2), floor(rows / 2));
     this.head.mult(scale);
 
@@ -18,8 +17,7 @@ class Snake {
   }
 
   update() {
-    for (let i = 0; i < this.tailLength - 1; i++)
-      this.tail[i] = this.tail[i + 1];
+    for (let i = 0; i < this.tailLength - 1; i++) this.tail[i] = this.tail[i + 1];
 
     this.move(this.head, this.direction);
     this.tail[this.tailLength - 1] = createVector(this.head.x, this.head.y);
@@ -48,15 +46,13 @@ class Snake {
   intersects(pos) {
     if (this.intersectsHead(pos)) return true;
 
-    for (let i = 0; i < this.tailLength - 1; i++)
-      if (this.tail[i].x === pos.x && this.tail[i].y === pos.y) return true;
+    for (let i = 0; i < this.tailLength - 1; i++) if (this.tail[i].x === pos.x && this.tail[i].y === pos.y) return true;
 
     return false;
   }
 
   intersectsSelf() {
-    for (let i = 0; i < this.tailLength - 1; i++)
-      if (this.intersectsHead(this.tail[i])) return true;
+    for (let i = 0; i < this.tailLength - 1; i++) if (this.intersectsHead(this.tail[i])) return true;
 
     return false;
   }
@@ -69,12 +65,12 @@ class Snake {
     this.direction = dir;
   }
 
-  getScore(){
-    let score = (this.tailLength - this.size) * 850
+  getScore() {
+    let score = (this.tailLength - this.size) * 850;
     return score > 0 ? score : 0;
   }
 
-  grow(){
+  grow() {
     this.tail.push(createVector(this.head.x, this.head.y));
     this.tail.push(createVector(this.head.x, this.head.y));
     this.tail.push(createVector(this.head.x, this.head.y));
@@ -85,9 +81,8 @@ class Snake {
     fill("#ccc");
     stroke("#fafafa");
 
-    for (let i = 0; i < this.tailLength; i++)
-      rect(this.tail[i].x, this.tail[i].y, scale, scale);
-    if(snake.dead) fill("#a97878");
+    for (let i = 0; i < this.tailLength; i++) rect(this.tail[i].x, this.tail[i].y, scale, scale);
+    if (snake.dead) fill("#a97878");
     rect(this.head.x, this.head.y, scale, scale);
   }
 }
