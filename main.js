@@ -75,7 +75,8 @@ function draw() {
   keyDown = false;
   textFont('Arial');
   textAlign(RIGHT);
-  fill('#999999');
+  noStroke();
+  fill('#777777');
   textSize(11);
   text('SCORE', score.pos.x + 50, score.pos.y);
   text('BEST', score.pos.x + 160, score.pos.y);
@@ -295,7 +296,7 @@ function move(key) {
 }
 
 function speedUp() {
-  if (snake.tailLength < 20 && currentFPS == 10 && currentFPS == 20) {
+  if (snake.tailLength < 20 && (currentFPS == 10 || currentFPS == 20)) {
     return;
   } else if (currentFPS == 10 && snake.tailLength > 20) {
     currentFPS = 12;

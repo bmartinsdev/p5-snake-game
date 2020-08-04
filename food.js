@@ -44,9 +44,9 @@ class Food {
   }
 
   show() {
-    fill("#000000");
+    fill("#d28f3c");
     stroke("#fafafa");
 
-    for (let i = 0; i < this.foodLength; i++) rect(this.food[i].x, this.food[i].y, scale, scale);
+    for (let i = 0; i < this.foodLength; i++) circle(this.food[i].x + scale / 2, this.food[i].y + scale / 2, scale, scale);
   }
 }
