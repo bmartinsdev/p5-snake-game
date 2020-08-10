@@ -9,7 +9,7 @@ let cols = Math.floor(wWidth / scale);
 let rows = Math.floor(wHeight / scale);
 let score = {
   pos: {
-    x: wWidth - 200,
+    x: wWidth - 160,
     y: wHeight - 50,
   },
   current: 0,
@@ -69,7 +69,7 @@ function update() {
 
 function draw() {
   this.update();
-  background('#fafafa');
+  background('#ffffff');
   food.show();
   snake.show();
   keyDown = false;
@@ -79,11 +79,11 @@ function draw() {
   fill('#777777');
   textSize(11);
   text('SCORE', score.pos.x + 50, score.pos.y);
-  text('BEST', score.pos.x + 160, score.pos.y);
+  text('BEST', score.pos.x + 130, score.pos.y);
   fill('#000000');
   textSize(14);
   text(score.current, score.pos.x + 50, score.pos.y + 20);
-  text(score.max, score.pos.x + 160, score.pos.y + 20);
+  text(score.max, score.pos.x + 130, score.pos.y + 20);
 }
 
 function pathFinder() {
